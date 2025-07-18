@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDistanceToNow } from "date-fns"
 import { fr } from "date-fns/locale"
+import { cn } from "@/lib/utils"
 import { getMetricUnit, getBassinNameById, type BassinData } from "@/lib/data"
 
 interface BassinCardProps {
@@ -47,11 +48,11 @@ export function BassinCard({ bassin }: BassinCardProps) {
 
   return (
     <Link href={`/bassin/${bassin.id}`}>
-      <Card className="hover:shadow-md transition-shadow">
+      <Card className="hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent/5">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold">{getBassinNameById(bassin.id)}</h3>
-            <Badge className={getStatusColor(bassin.statut)}>{getStatusText(bassin.statut)}</Badge>
+            <h3 className="font-semibold text-lg">{getBassinNameById(bassin.id)}</h3>
+            <Badge className={cn(getStatusColor(bassin.statut), "shadow-sm")}>{getStatusText(bassin.statut)}</Badge>
           </div>
 
           <div className="grid grid-cols-3 gap-3 mb-3">

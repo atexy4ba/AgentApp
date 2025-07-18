@@ -1,12 +1,12 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { GeistSans } from "geist/font/sans"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
-import { MobileNavigation } from "@/components/mobile-navigation"
+import MobileNavigation from "@/components/mobile-navigation"
 
-const inter = Inter({ subsets: ["latin"] })
+const font = GeistSans
 
 export const metadata: Metadata = {
   title: "AquaFarm Agent",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={font.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
             <div className="min-h-screen bg-background">

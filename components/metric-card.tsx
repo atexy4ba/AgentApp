@@ -13,13 +13,13 @@ export function MetricCard({ label, value, unit, status }: MetricCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "ok":
-        return "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+        return "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/50 shadow-sm shadow-green-100 dark:shadow-green-900/20"
       case "attention":
-        return "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950"
+        return "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/50 shadow-sm shadow-yellow-100 dark:shadow-yellow-900/20"
       case "critique":
-        return "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+        return "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/50 shadow-sm shadow-red-100 dark:shadow-red-900/20"
       default:
-        return "border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950"
+        return "border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950/50 shadow-sm shadow-gray-100 dark:shadow-gray-900/20"
     }
   }
 
