@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
 import MobileNavigation from "@/components/mobile-navigation"
+import { AlertesInterventionsProvider } from "@/contexts/alertes-interventions-context";
 
 const font = GeistSans
 
@@ -24,10 +25,12 @@ export default function RootLayout({
       <body className={font.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
-            <div className="min-h-screen bg-background">
-              <main className="pb-16 md:pb-0 md:pt-20">{children}</main>
-              <MobileNavigation />
-            </div>
+            <AlertesInterventionsProvider>
+              <div className="min-h-screen bg-background">
+                <main className="pb-16 md:pb-0 md:pt-20">{children}</main>
+                <MobileNavigation />
+              </div>
+            </AlertesInterventionsProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

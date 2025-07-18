@@ -12,28 +12,15 @@ import { fr } from "date-fns/locale"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/language-context"
 import { getInterventions, getBassinNameById, type InterventionData } from "@/lib/data"
+import FormulaireInterventionAlerte from "@/components/formulaire-intervention-alerte";
+import { useAlertesInterventions } from "@/contexts/alertes-interventions-context";
 
 export default function JournalPage() {
   const [interventionOpen, setInterventionOpen] = useState(false)
   const [filterType, setFilterType] = useState<string>("all")
-  const [interventions, setInterventions] = useState<InterventionData[]>([])
-  const [loading, setLoading] = useState(true)
+  const { interventions, alertes } = useAlertesInterventions();
+  const loading = false;
   const { t } = useLanguage()
-
-  useEffect(() => {
-    const loadInterventions = async () => {
-      try {
-        const data = await getInterventions()
-        setInterventions(data)
-      } catch (error) {
-        console.error("Error loading interventions:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadInterventions()
-  }, [])
 
   const filteredInterventions = interventions.filter((intervention) => {
     if (filterType === "all") return true
@@ -89,10 +76,18 @@ export default function JournalPage() {
 
       <div className="p-4 space-y-4">
         {/* Bouton nouvelle intervention */}
-        <Button onClick={() => setInterventionOpen(true)} className="w-full gap-2">
+        <Button
+          onClick={() => setInterventionOpen(true)}
+          className={`w-full gap-2 ${alertes.length === 0 ? 'bg-gray-200 text-gray-500 border border-gray-300 cursor-not-allowed' : ''}`}
+          disabled={alertes.length === 0}
+        >
           <FileText className="h-4 w-4" />
-          {t("journal.new.intervention")}
+          {alertes.length === 0 ? "Aucune alerte active" : t("journal.new.intervention")}
         </Button>
+
+        {interventionOpen && (
+          <FormulaireInterventionAlerte open={interventionOpen} onOpenChange={setInterventionOpen} />
+        )}
 
         {/* Filtres */}
         <div className="flex gap-2 overflow-x-auto pb-2">
@@ -193,7 +188,7 @@ export default function JournalPage() {
         )}
       </div>
 
-      <InterventionDialog open={interventionOpen} onOpenChange={setInterventionOpen} />
+      {/* <InterventionDialog open={interventionOpen} onOpenChange={setInterventionOpen} /> */}
     </div>
   )
 }
