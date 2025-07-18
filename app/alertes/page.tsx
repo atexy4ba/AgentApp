@@ -9,6 +9,7 @@ import { Header } from "@/components/header"
 import { formatDistanceToNow } from "date-fns"
 import { fr } from "date-fns/locale"
 import { useLanguage } from "@/contexts/language-context"
+import { useAlertesInterventions } from "@/contexts/alertes-interventions-context";
 import {
   getAlerts,
   getAlertsSummary,
@@ -20,39 +21,29 @@ import {
 
 export default function AlertesPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [alerts, setAlerts] = useState<AlertData[]>([])
-  const [loading, setLoading] = useState(true)
+  const { alertes } = useAlertesInterventions();
   const { t } = useLanguage()
 
-  useEffect(() => {
-    const loadAlerts = async () => {
-      try {
-        const data = await getAlerts()
-        setAlerts(data)
-      } catch (error) {
-        console.error("Error loading alerts:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadAlerts()
-  }, [])
-
-  const filteredAlertes = alerts.filter((alerte) => {
+  // On ne garde que les alertes actives ou selon le filtre
+  const filteredAlertes = alertes.filter((alerte) => {
     if (statusFilter === "all") return true
     return alerte.status === statusFilter
   })
 
-  const summary = getAlertsSummary(alerts)
+  // Calcul du résumé (nombre total/actives)
+  const summary = {
+    total: alertes.length,
+    active: alertes.filter(a => a.status === "active").length,
+    resolved: 0 // plus de resolved dans le contexte, à adapter si besoin
+  }
 
   const handleAcknowledge = async (alerteId: string) => {
     try {
       await acknowledgeAlert(alerteId)
       // Update local state
-      setAlerts((prev) =>
-        prev.map((alert) => (alert.id === alerteId ? { ...alert, status: "acknowledged" as const } : alert)),
-      )
+      // setAlerts((prev) =>
+      //   prev.map((alert) => (alert.id === alerteId ? { ...alert, status: "acknowledged" as const } : alert)),
+      // )
     } catch (error) {
       console.error("Error acknowledging alert:", error)
     }
@@ -62,9 +53,9 @@ export default function AlertesPage() {
     try {
       await resolveAlert(alerteId)
       // Update local state
-      setAlerts((prev) =>
-        prev.map((alert) => (alert.id === alerteId ? { ...alert, status: "resolved" as const } : alert)),
-      )
+      // setAlerts((prev) =>
+      //   prev.map((alert) => (alert.id === alerteId ? { ...alert, status: "resolved" as const } : alert)),
+      // )
     } catch (error) {
       console.error("Error resolving alert:", error)
     }
@@ -92,17 +83,6 @@ export default function AlertesPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des alertes...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <Header title={t("alerts.title")} />
@@ -124,13 +104,6 @@ export default function AlertesPage() {
           >
             {t("alerts.active")} ({summary.active})
           </Button>
-          <Button
-            variant={statusFilter === "resolved" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setStatusFilter("resolved")}
-          >
-            {t("alerts.resolved")} ({summary.resolved})
-          </Button>
         </div>
 
         {/* Liste des alertes */}
@@ -139,8 +112,8 @@ export default function AlertesPage() {
             <Card key={alerte.id} className="relative overflow-hidden">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-full flex-shrink-0 ${getSeverityColor(alerte.severity)}`}>
-                    {getStatusIcon(alerte.status)}
+                  <div className={`p-2 rounded-full flex-shrink-0 ${alerte.severity === 'critical' ? 'text-red-600 bg-red-50 dark:bg-red-950' : 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950'}`}>
+                    <AlertTriangle className="h-4 w-4" />
                   </div>
 
                   <div className="flex-1 min-w-0 space-y-2">
@@ -165,41 +138,10 @@ export default function AlertesPage() {
                           locale: fr,
                         })}
                       </span>
-                      <Badge
-                        variant={
-                          alerte.status === "resolved"
-                            ? "default"
-                            : alerte.status === "acknowledged"
-                              ? "secondary"
-                              : "destructive"
-                        }
-                        className="flex-shrink-0"
-                      >
-                        {alerte.status === "resolved"
-                          ? t("common.resolved")
-                          : alerte.status === "acknowledged"
-                            ? t("common.acknowledged")
-                            : t("common.active")}
+                      <Badge variant="destructive" className="flex-shrink-0">
+                        {t("common.active")}
                       </Badge>
                     </div>
-
-                    {(alerte.status === "active" || alerte.status === "acknowledged") && (
-                      <div className="flex flex-col sm:flex-row gap-2 pt-2">
-                        {alerte.status === "active" && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleAcknowledge(alerte.id)}
-                            className="text-xs"
-                          >
-                            {t("alerts.acknowledge")}
-                          </Button>
-                        )}
-                        <Button size="sm" onClick={() => handleResolve(alerte.id)} className="text-xs">
-                          {t("alerts.mark.resolved")}
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 </div>
               </CardContent>
@@ -208,7 +150,10 @@ export default function AlertesPage() {
         </div>
 
         {filteredAlertes.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">{t("alerts.no.results")}</div>
+          <div className="flex flex-col items-center justify-center py-16">
+            <CheckCircle className="h-20 w-20 text-green-500 dark:text-green-400" />
+            <span className="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">Aucune alerte active</span>
+          </div>
         )}
       </div>
     </div>
