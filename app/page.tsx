@@ -10,63 +10,42 @@ import { OverallStatusCard } from "@/components/overall-status-card"
 import { Header } from "@/components/header"
 import { useLanguage } from "@/contexts/language-context"
 import { getBassins, getAlerts, getBassinSummary, type BassinData, type AlertData } from "@/lib/data"
+import { useAlertesInterventions } from "@/contexts/alertes-interventions-context";
+import bassinsData from "../data/bassins.json";
 
 export default function HomePage() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const [searchTerm, setSearchTerm] = useState("")
-  const [bassins, setBassins] = useState<BassinData[]>([])
-  const [alerts, setAlerts] = useState<AlertData[]>([])
-  const [loading, setLoading] = useState(true)
+  const { alertes } = useAlertesInterventions();
   const { t } = useLanguage()
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [bassinsData, alertsData] = await Promise.all([
-          getBassins(),
-          getAlerts()
-        ])
-        setBassins(bassinsData)
-        setAlerts(alertsData.filter(alert => alert.status === "active"))
-      } catch (error) {
-        console.error("Error loading data:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  if (!mounted) return null;
 
-    loadData()
-  }, [])
-
-  const filteredAlerts = alerts.filter((alert) =>
+  // On ne garde que les alertes actives (déjà filtrées dans le contexte)
+  const filteredAlerts = alertes.filter((alert) =>
     alert.bassinId.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const summary = getBassinSummary(bassins)
+  // Plus de gestion de loading ni de bassins ici (à adapter si besoin)
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des données...</p>
-        </div>
-      </div>
-    )
-  }
+  // Calcul dynamique des états des alertes actives
+  const criticalCount = alertes.filter(a => a.severity === "critical").length;
+  const warningCount = alertes.filter(a => a.severity === "warning").length;
+  const okCount = alertes.length - criticalCount - warningCount;
+  const totalBassins = criticalCount + warningCount + okCount;
 
   return (
     <div className="min-h-screen bg-background">
       <Header title={t("home.title")} />
 
       <div className="p-4 space-y-6">
-        {/* État global */}
         <OverallStatusCard
-          totalBassins={bassins.length}
-          criticalCount={summary.critique}
-          warningCount={summary.attention}
-          okCount={summary.ok}
+          totalBassins={totalBassins}
+          criticalCount={criticalCount}
+          warningCount={warningCount}
+          okCount={okCount}
         />
-
         {/* Barre de recherche pour les alertes */}
         <div className="flex gap-2">
           <div className="flex-1 relative">
@@ -82,20 +61,13 @@ export default function HomePage() {
         </div>
 
         {/* Liste des alertes ou message "tout va bien" */}
-        {alerts.length > 0 ? (
-          <AlertHistory alerts={filteredAlerts} />
+        {alertes.length > 0 ? (
+          <AlertHistory alerts={filteredAlerts as any} />
         ) : (
-          <Card className="bg-green-50 dark:bg-green-950/50 border-green-200 dark:border-green-800">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-              <CheckCircle2 className="h-12 w-12 text-green-500 mb-4" />
-              <h3 className="text-lg font-medium text-green-700 dark:text-green-300 mb-2">
-                Tout va bien !
-              </h3>
-              <p className="text-green-600 dark:text-green-400">
-                Aucune alerte active pour le moment.
-              </p>
-            </CardContent>
-          </Card>
+          <div className="flex flex-col items-center justify-center py-16">
+            <CheckCircle2 className="h-20 w-20 text-green-500 dark:text-green-400" />
+            <span className="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">Aucune alerte active</span>
+          </div>
         )}
       </div>
     </div>
