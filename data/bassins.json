@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "statut": "ok",
+    "capacity": 1500,
+    "metrics": {
+      "fish_count": { "value": 1250, "status": "ok" },
+      "ph": { "value": 7.2, "status": "ok" },
+      "salinity": { "value": 35.2, "status": "ok" },
+      "suspended_solids": { "value": 12, "status": "attention" },
+      "nitrate": { "value": 15.5, "status": "ok" },
+      "ammonia": { "value": 0.8, "status": "attention" },
+      "water_level": { "value": 2.8, "status": "ok" },
+      "oxygen": { "value": 8.5, "status": "ok" },
+      "turbidity": { "value": 12, "status": "attention" },
+      "chlorophyll": { "value": 25.3, "status": "ok" },
+      "fish_behavior": { "value": 85, "status": "ok" },
+      "health": { "value": 92, "status": "ok" }
+    },
+    "chartData": [
+      { "time": "00:00", "ph": 7.1, "oxygen": 8.2, "temp": 24.2, "health": 91 },
+      { "time": "04:00", "ph": 7.2, "oxygen": 8.4, "temp": 24.0, "health": 92 },
+      { "time": "08:00", "ph": 7.2, "oxygen": 8.5, "temp": 24.3, "health": 92 },
+      { "time": "12:00", "ph": 7.1, "oxygen": 8.3, "temp": 24.8, "health": 93 },
+      { "time": "16:00", "ph": 7.2, "oxygen": 8.5, "temp": 24.5, "health": 92 }
+    ],
+    "aiAdvice": "La santé des poissons est excellente (92%). Légère augmentation des matières en suspension et de l'ammoniaque - vérifiez les filtres biologiques. Le comportement des poissons reste normal.",
+    "derniereMesure": "2024-01-18T14:30:00Z"
+  },
+  {
+    "id": "2",
+    "statut": "attention",
+    "capacity": 1200,
+    "metrics": {
+      "fish_count": { "value": 980, "status": "attention" },
+      "ph": { "value": 6.8, "status": "attention" },
+      "salinity": { "value": 33.1, "status": "ok" },
+      "suspended_solids": { "value": 18, "status": "critique" },
+      "nitrate": { "value": 22.1, "status": "attention" },
+      "ammonia": { "value": 1.2, "status": "critique" },
+      "water_level": { "value": 2.6, "status": "attention" },
+      "oxygen": { "value": 7.8, "status": "attention" },
+      "turbidity": { "value": 18, "status": "critique" },
+      "chlorophyll": { "value": 32.8, "status": "attention" },
+      "fish_behavior": { "value": 72, "status": "attention" },
+      "health": { "value": 78, "status": "attention" }
+    },
+    "chartData": [
+      { "time": "00:00", "ph": 6.9, "oxygen": 7.9, "temp": 26.2, "health": 79 },
+      { "time": "04:00", "ph": 6.8, "oxygen": 7.8, "temp": 26.5, "health": 78 },
+      { "time": "08:00", "ph": 6.8, "oxygen": 7.7, "temp": 26.8, "health": 77 },
+      { "time": "12:00", "ph": 6.7, "oxygen": 7.8, "temp": 26.9, "health": 78 },
+      { "time": "16:00", "ph": 6.8, "oxygen": 7.8, "temp": 26.8, "health": 78 }
+    ],
+    "aiAdvice": "Situation préoccupante : santé des poissons en baisse (78%), comportement anormal détecté. pH bas et ammoniaque élevée nécessitent une intervention immédiate. Augmentez l'aération et ajustez le pH.",
+    "derniereMesure": "2024-01-18T14:25:00Z"
+  },
+  {
+    "id": "3",
+    "statut": "critique",
+    "capacity": 1000,
+    "metrics": {
+      "fish_count": { "value": 850, "status": "critique" },
+      "ph": { "value": 6.2, "status": "critique" },
+      "salinity": { "value": 31.5, "status": "attention" },
+      "suspended_solids": { "value": 28, "status": "critique" },
+      "nitrate": { "value": 35.8, "status": "critique" },
+      "ammonia": { "value": 2.1, "status": "critique" },
+      "water_level": { "value": 2.3, "status": "critique" },
+      "oxygen": { "value": 5.2, "status": "critique" },
+      "turbidity": { "value": 35, "status": "critique" },
+      "chlorophyll": { "value": 45.2, "status": "critique" },
+      "fish_behavior": { "value": 45, "status": "critique" },
+      "health": { "value": 58, "status": "critique" }
+    },
+    "chartData": [
+      { "time": "00:00", "ph": 6.4, "oxygen": 5.8, "temp": 28.5, "health": 62 },
+      { "time": "04:00", "ph": 6.3, "oxygen": 5.5, "temp": 28.8, "health": 60 },
+      { "time": "08:00", "ph": 6.2, "oxygen": 5.2, "temp": 29.1, "health": 58 },
+      { "time": "12:00", "ph": 6.1, "oxygen": 5.0, "temp": 29.2, "health": 57 },
+      { "time": "16:00", "ph": 6.2, "oxygen": 5.2, "temp": 29.2, "health": 58 }
+    ],
+    "aiAdvice": "URGENCE : Santé des poissons critique (58%), mortalité probable. Oxygène très bas, pH critique, ammoniaque toxique. Intervention immédiate requise : aération maximale, changement d'eau partiel, ajustement pH urgent.",
+    "derniereMesure": "2024-01-18T14:20:00Z"
+  },
+  {
+    "id": "4",
+    "statut": "ok",
+    "capacity": 1400,
+    "metrics": {
+      "fish_count": { "value": 1180, "status": "ok" },
+      "ph": { "value": 7.4, "status": "ok" },
+      "salinity": { "value": 34.8, "status": "ok" },
+      "suspended_solids": { "value": 8, "status": "ok" },
+      "nitrate": { "value": 12.3, "status": "ok" },
+      "ammonia": { "value": 0.5, "status": "ok" },
+      "water_level": { "value": 2.9, "status": "ok" },
+      "oxygen": { "value": 9.2, "status": "ok" },
+      "turbidity": { "value": 8, "status": "ok" },
+      "chlorophyll": { "value": 18.7, "status": "ok" },
+      "fish_behavior": { "value": 95, "status": "ok" },
+      "health": { "value": 95, "status": "ok" }
+    },
+    "chartData": [
+      { "time": "00:00", "ph": 7.3, "oxygen": 9.0, "temp": 23.5, "health": 94 },
+      { "time": "04:00", "ph": 7.4, "oxygen": 9.1, "temp": 23.8, "health": 95 },
+      { "time": "08:00", "ph": 7.4, "oxygen": 9.2, "temp": 23.8, "health": 95 },
+      { "time": "12:00", "ph": 7.3, "oxygen": 9.1, "temp": 24.0, "health": 96 },
+      { "time": "16:00", "ph": 7.4, "oxygen": 9.2, "temp": 23.8, "health": 95 }
+    ],
+    "aiAdvice": "Conditions optimales maintenues. Tous les paramètres sont dans les plages idéales. Excellente santé des poissons (95%) et comportement normal. Continuez la surveillance de routine.",
+    "derniereMesure": "2024-01-18T14:35:00Z"
+  },
+  {
+    "id": "5",
+    "statut": "attention",
+    "capacity": 1300,
+    "metrics": {
+      "fish_count": { "value": 1050, "status": "ok" },
+      "ph": { "value": 6.9, "status": "attention" },
+      "salinity": { "value": 32.8, "status": "attention" },
+      "suspended_solids": { "value": 15, "status": "attention" },
+      "nitrate": { "value": 18.7, "status": "attention" },
+      "ammonia": { "value": 1.0, "status": "attention" },
+      "water_level": { "value": 2.7, "status": "ok" },
+      "oxygen": { "value": 8.0, "status": "ok" },
+      "turbidity": { "value": 14, "status": "attention" },
+      "chlorophyll": { "value": 28.5, "status": "attention" },
+      "fish_behavior": { "value": 82, "status": "ok" },
+      "health": { "value": 82, "status": "ok" }
+    },
+    "chartData": [
+      { "time": "00:00", "ph": 7.0, "oxygen": 8.1, "temp": 25.0, "health": 83 },
+      { "time": "04:00", "ph": 6.9, "oxygen": 8.0, "temp": 25.2, "health": 82 },
+      { "time": "08:00", "ph": 6.9, "oxygen": 8.0, "temp": 25.2, "health": 82 },
+      { "time": "12:00", "ph": 6.8, "oxygen": 7.9, "temp": 25.4, "health": 81 },
+      { "time": "16:00", "ph": 6.9, "oxygen": 8.0, "temp": 25.2, "health": 82 }
+    ],
+    "aiAdvice": "Paramètres en surveillance. pH légèrement bas et salinité en baisse. Santé des poissons stable (82%). Surveillez l'évolution et préparez un ajustement si nécessaire.",
+    "derniereMesure": "2024-01-18T14:28:00Z"
+  }
+]
