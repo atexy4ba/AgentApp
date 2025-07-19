@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { useAlertesInterventions } from "../contexts/alertes-interventions-context";
 import { getBassinNameById } from "@/lib/data";
 
-const PRIORITY_ORDER = { critical: 1, warning: 2 };
+// ✅ CORRECTION : Ajout d'une signature de type pour autoriser l'indexation par une chaîne de caractères
+const PRIORITY_ORDER: { [key: string]: number } = { critical: 1, warning: 2 };
 
 export default function FormulaireInterventionAlerte({ open = true, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) {
   const { alertes, creerInterventionDepuisAlerte } = useAlertesInterventions();
@@ -92,4 +93,4 @@ export default function FormulaireInterventionAlerte({ open = true, onOpenChange
       </DialogContent>
     </Dialog>
   );
-} 
+}
