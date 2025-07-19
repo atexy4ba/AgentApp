@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import { TooltipProps, LegendProps } from "recharts"
+import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent"
 
 import { cn } from "@/lib/utils"
 
@@ -102,35 +104,51 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+// Définir les props personnalisées pour ChartTooltipContent
+interface CustomTooltipProps {
+  hideLabel?: boolean
+  hideIndicator?: boolean
+  indicator?: "line" | "dot" | "dashed"
+  nameKey?: string
+  labelKey?: string
+  className?: string
+  labelClassName?: string
+  formatter?: (
+    value: any,
+    name: any,
+    item: any,
+    index: number,
+    payload: any
+  ) => React.ReactNode
+  color?: string
+}
+
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
-      hideLabel?: boolean
-      hideIndicator?: boolean
-      indicator?: "line" | "dot" | "dashed"
-      nameKey?: string
-      labelKey?: string
-    }
+  React.ComponentProps<"div"> & TooltipProps<ValueType, NameType> & CustomTooltipProps
 >(
   (
-    {
+    props,
+    ref
+  ) => {
+    // On sépare les props personnalisées et celles de Recharts
+    const {
       active,
-      payload,
       className,
       indicator = "dot",
       hideLabel = false,
       hideIndicator = false,
-      label,
       labelFormatter,
       labelClassName,
       formatter,
       color,
       nameKey,
       labelKey,
-    },
-    ref
-  ) => {
+      ...rest
+    } = props as CustomTooltipProps & TooltipProps<ValueType, NameType>
+    // On récupère payload et label via props (elles sont optionnelles)
+    const payload = (props as any).payload ?? [];
+    const label = (props as any).label;
     const { config } = useChart()
 
     const tooltipLabel = React.useMemo(() => {
@@ -138,7 +156,7 @@ const ChartTooltipContent = React.forwardRef<
         return null
       }
 
-      const [item] = payload
+      const [item] = payload as Array<any>
       const key = `${labelKey || item.dataKey || item.name || "value"}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
       const value =
@@ -185,10 +203,10 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          {(payload as Array<any>).map((item: any, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
-            const indicatorColor = color || item.payload.fill || item.color
+            const indicatorColor = color || item.payload?.fill || item.color
 
             return (
               <div
@@ -258,21 +276,20 @@ ChartTooltipContent.displayName = "ChartTooltip"
 
 const ChartLegend = RechartsPrimitive.Legend
 
-const ChartLegendContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean
-      nameKey?: string
-    }
->(
-  (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
-    ref
-  ) => {
+const ChartLegendContent = React.forwardRef<HTMLDivElement, any>(
+  (props, ref) => {
+    const {
+      className,
+      hideIcon = false,
+      verticalAlign = "bottom",
+      nameKey,
+      ...rest
+    } = props as any
+    // On récupère payload via props (optionnel)
+    const payload = (props as any)?.payload ?? [];
     const { config } = useChart()
 
-    if (!payload?.length) {
+    if (!payload || !(payload as Array<any>).length) {
       return null
     }
 
@@ -285,13 +302,13 @@ const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item) => {
+        {(payload as Array<any>).map((item: any) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
           return (
             <div
-              key={item.value}
+              key={item.value as string}
               className={cn(
                 "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
               )}
