@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable access from network devices
-  hostname: '0.0.0.0',
-  port: 3000,
   // Performance optimizations
   eslint: {
     ignoreDuringBuilds: true,
